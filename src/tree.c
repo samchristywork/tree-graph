@@ -72,3 +72,42 @@ char **readExtra(int *length) {
   *length = count;
   return lines;
 }
+
+int getDepthFromIndentation(const char *line) {
+  int depth = 0;
+  while (line[depth] == ' ') {
+    depth++;
+  }
+  return depth / 2 + 1;
+}
+
+Tree *processNodes(char **lines) {
+  Tree *root = malloc(sizeof(Tree));
+  root->text = strdup("recipe");
+
+  Tree *currentNode = root;
+  int currentDepth = 0;
+
+  for (int i = 0; lines[i] != NULL; i++) {
+    int depth = getDepthFromIndentation(lines[i]);
+    char *line = lines[i] + (depth - 1) * 2;
+    if (depth > currentDepth) {
+      add_child(currentNode, line);
+      currentNode = currentNode->children[currentNode->children_count - 1];
+      currentDepth = depth;
+    } else if (depth < currentDepth) {
+      for (int j = 0; j < currentDepth - depth + 1; j++) {
+        currentNode = currentNode->parent;
+      }
+      add_child(currentNode, line);
+      currentNode = currentNode->children[currentNode->children_count - 1];
+      currentDepth = depth;
+    } else {
+      currentNode = currentNode->parent;
+      add_child(currentNode, line);
+      currentNode = currentNode->children[currentNode->children_count - 1];
+    }
+  }
+
+  return root;
+}

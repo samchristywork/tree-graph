@@ -8,4 +8,8 @@ typedef struct Tree {
   unsigned int children_count;
 } Tree;
 
+char **readNodes();
+char **readExtra(int *length);
+Tree *processNodes(char **lines);
+
 #endif
