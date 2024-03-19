@@ -88,3 +88,25 @@ void draw_bezier(cairo_t *cr, double x1, double y1, double x2, double y2) {
   draw_circle(cr, x1, y1, 3);
   draw_circle(cr, x2, y2, 3);
 }
+
+double draw_tree(cairo_t *cr, Tree *tree, double x, double y) {
+  double initial_x = x;
+  double initial_y = y;
+  double width = draw_node(cr, initial_x, initial_y, tree->text);
+  x += width + paddingX * 2 + marginX;
+
+  if (tree->children_count == 0) {
+    return font_size + paddingY * 2 + marginY;
+  }
+
+  double height = 0;
+
+  for (unsigned int i = 0; i < tree->children_count; i++) {
+    draw_bezier(cr, x - marginX, initial_y + font_size, x,
+                y + height + font_size);
+    height += draw_tree(cr, tree->children[i], x, y + height);
+  }
+
+  draw_node(cr, initial_x, initial_y, tree->text);
+  return height;
+}
