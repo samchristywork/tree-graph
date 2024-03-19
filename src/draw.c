@@ -51,3 +51,40 @@ void draw_text(cairo_t *cr, double x, double y, const char *text) {
   cairo_show_text(cr, text);
 }
 
+double draw_node(cairo_t *cr, double x, double y, char *text) {
+  double width = get_text_width(text);
+
+  if (cr != NULL) {
+    cairo_set_source_rgb(cr, 1, 1, 1);
+  }
+  draw_text_rect(cr, x, y, width);
+  draw_text(cr, x, y + font_size, text);
+
+  return width;
+}
+
+void draw_circle(cairo_t *cr, double x, double y, double radius) {
+  if (cr == NULL) {
+    return;
+  }
+
+  cairo_set_source_rgb(cr, 0, 0, 0);
+  cairo_arc(cr, x, y, radius, 0, 2 * M_PI);
+  cairo_stroke(cr);
+}
+
+void draw_bezier(cairo_t *cr, double x1, double y1, double x2, double y2) {
+  if (cr == NULL) {
+    return;
+  }
+
+  double xmid = (x1 + x2) / 2;
+
+  cairo_set_source_rgba(cr, 0.6, 0.5, 0.7, 0.5);
+  cairo_move_to(cr, x1, y1);
+  cairo_curve_to(cr, xmid, y1, xmid, y2, x2, y2);
+  cairo_stroke(cr);
+
+  draw_circle(cr, x1, y1, 3);
+  draw_circle(cr, x2, y2, 3);
+}
