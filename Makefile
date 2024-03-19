@@ -11,7 +11,7 @@ build/%.o: src/%.c
 	mkdir -p build
 	$(CC) -c $(CFLAGS) $< -o $@
 
-build/tree-render: build/main.o
+build/tree-render: build/main.o build/draw.o build/tree.o
 	${CC} build/*.o ${LIBS} -o $@
 
 .PHONY: clean
