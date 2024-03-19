@@ -1,112 +1,136 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include <draw.h>
+#include "draw.h"
 
-double get_text_width(const char *text) {
-  cairo_t *cr;
-  cairo_surface_t *surface;
+cairo_t *init_cairo(Context *ctx, int width, int height) {
+  int format = CAIRO_FORMAT_ARGB32;
+  cairo_surface_t *surface = cairo_image_surface_create(format, width, height);
+  cairo_t *cr = cairo_create(surface);
 
-  surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 0, 0);
-  cr = cairo_create(surface);
+  int slant = CAIRO_FONT_SLANT_NORMAL;
+  int weight = CAIRO_FONT_WEIGHT_NORMAL;
+  cairo_select_font_face(cr, "Sans", slant, weight);
+
+  cairo_set_font_size(cr, ctx->font_size);
+  return cr;
+}
+
+double get_text_width(Context *ctx, const char *text) {
+  cairo_t *cr = init_cairo(ctx, 0, 0);
 
   cairo_text_extents_t extents;
-  cairo_select_font_face(cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
-                         CAIRO_FONT_WEIGHT_NORMAL);
-
-  cairo_set_font_size(cr, font_size);
   cairo_text_extents(cr, text, &extents);
-
   return extents.width;
 }
 
-void draw_text_rect(cairo_t *cr, double x, double y, double width) {
-  if (x + width + paddingX * 2 > max_width) {
-    max_width = (int)(x + width + paddingX * 2);
-  }
-
-  if (y + font_size + paddingY * 2 > max_height) {
-    max_height = (int)(y + font_size + paddingY * 2);
-  }
-
-  if (cr == NULL) {
-    return;
-  }
-
-  cairo_rectangle(cr, x, y, width + paddingX * 2, font_size + paddingY * 2);
+void draw_background(Context *ctx, cairo_t *cr) {
+  cairo_set_source_rgb(cr, 0.9, 0.9, 0.9);
+  cairo_rectangle(cr, 0, 0, ctx->max_width, ctx->max_height);
   cairo_fill(cr);
-
-  cairo_set_source_rgb(cr, 0, 0, 0);
-  cairo_rectangle(cr, x, y, width + paddingX * 2, font_size + paddingY * 2);
-  cairo_stroke(cr);
 }
 
-void draw_text(cairo_t *cr, double x, double y, const char *text) {
+void draw_text_rect(Context *ctx, cairo_t *cr, Vec2 pos, double width) {
+  if (pos.x + width + ctx->pad.x * 2 > ctx->max_width) {
+    ctx->max_width = (int)(pos.x + width + ctx->pad.x * 2);
+  }
+
+  if (pos.y + ctx->font_size + ctx->pad.y * 2 > ctx->max_height) {
+    ctx->max_height = (int)(pos.y + ctx->font_size + ctx->pad.y * 2);
+  }
+
+  if (cr == NULL) {
+    return;
+  }
+
+  {
+    double w = width + ctx->pad.x * 2;
+    double h = ctx->font_size + ctx->pad.y * 2;
+
+    cairo_set_source_rgb(cr, 1, 1, 1);
+    cairo_rectangle(cr, pos.x, pos.y, w, h);
+    cairo_fill(cr);
+  }
+
+  {
+    double w = width + ctx->pad.x * 2;
+    double h = ctx->font_size + ctx->pad.y * 2;
+
+    cairo_set_source_rgb(cr, 0, 0, 0);
+    cairo_rectangle(cr, pos.x, pos.y, w, h);
+    cairo_stroke(cr);
+  }
+}
+
+void draw_text(Context *ctx, cairo_t *cr, Vec2 pos, const char *text) {
   if (cr == NULL) {
     return;
   }
 
   cairo_set_source_rgb(cr, 0, 0, 0);
-  cairo_move_to(cr, x + paddingX, y + paddingY);
+  cairo_move_to(cr, pos.x + ctx->pad.x, pos.y + ctx->pad.y);
   cairo_show_text(cr, text);
 }
 
-double draw_node(cairo_t *cr, double x, double y, char *text) {
-  double width = get_text_width(text);
+double draw_node(Context *ctx, cairo_t *cr, Vec2 pos, char *text) {
+  double width = get_text_width(ctx, text);
 
   if (cr != NULL) {
     cairo_set_source_rgb(cr, 1, 1, 1);
   }
-  draw_text_rect(cr, x, y, width);
-  draw_text(cr, x, y + font_size, text);
+  draw_text_rect(ctx, cr, pos, width);
+
+  Vec2 textPos = {pos.x, pos.y + ctx->font_size};
+  draw_text(ctx, cr, textPos, text);
 
   return width;
 }
 
-void draw_circle(cairo_t *cr, double x, double y, double radius) {
+void draw_circle(cairo_t *cr, Vec2 pos, double radius) {
   if (cr == NULL) {
     return;
   }
 
   cairo_set_source_rgb(cr, 0, 0, 0);
-  cairo_arc(cr, x, y, radius, 0, 2 * M_PI);
+  cairo_arc(cr, pos.x, pos.y, radius, 0, 2 * M_PI);
   cairo_stroke(cr);
 }
 
-void draw_bezier(cairo_t *cr, double x1, double y1, double x2, double y2) {
+void draw_bezier(cairo_t *cr, Vec2 p1, Vec2 p2) {
   if (cr == NULL) {
     return;
   }
 
-  double xmid = (x1 + x2) / 2;
-
+  double xmid = (p1.x + p2.x) / 2;
   cairo_set_source_rgba(cr, 0.6, 0.5, 0.7, 0.5);
-  cairo_move_to(cr, x1, y1);
-  cairo_curve_to(cr, xmid, y1, xmid, y2, x2, y2);
+  cairo_move_to(cr, p1.x, p1.y);
+  cairo_curve_to(cr, xmid, p1.y, xmid, p2.y, p2.x, p2.y);
   cairo_stroke(cr);
 
-  draw_circle(cr, x1, y1, 3);
-  draw_circle(cr, x2, y2, 3);
+  draw_circle(cr, p1, 3);
+  draw_circle(cr, p2, 3);
 }
 
-double draw_tree(cairo_t *cr, Tree *tree, double x, double y) {
-  double initial_x = x;
-  double initial_y = y;
-  double width = draw_node(cr, initial_x, initial_y, tree->text);
-  x += width + paddingX * 2 + marginX;
+double draw_tree(Context *ctx, cairo_t *cr, Tree *tree, Vec2 pos) {
+  Vec2 initial = {pos.x, pos.y};
+  double width = draw_node(ctx, cr, initial, tree->text);
+  pos.x += width + ctx->pad.x * 2 + ctx->gap.x;
 
   if (tree->children_count == 0) {
-    return font_size + paddingY * 2 + marginY;
+    return ctx->font_size + ctx->pad.y * 2 + ctx->gap.y;
   }
 
   double height = 0;
 
   for (unsigned int i = 0; i < tree->children_count; i++) {
-    draw_bezier(cr, x - marginX, initial_y + font_size, x,
-                y + height + font_size);
-    height += draw_tree(cr, tree->children[i], x, y + height);
+    Vec2 p1 = {pos.x - ctx->gap.x, initial.y + ctx->font_size};
+    Vec2 p2 = {pos.x, pos.y + height + ctx->font_size};
+    draw_bezier(cr, p1, p2);
+
+    Vec2 treePos = {pos.x, pos.y + height};
+    height += draw_tree(ctx, cr, tree->children[i], treePos);
   }
 
-  draw_node(cr, initial_x, initial_y, tree->text);
+  draw_node(ctx, cr, initial, tree->text);
   return height;
 }
