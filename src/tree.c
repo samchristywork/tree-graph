@@ -111,3 +111,23 @@ Tree *processNodes(char **lines) {
 
   return root;
 }
+
+void free_lines(char **lines) {
+  for (int i = 0; lines[i] != NULL; i++) {
+    free(lines[i]);
+  }
+  free(lines);
+}
+
+void free_tree(Tree *root) {
+  if (root == NULL) {
+    return;
+  }
+
+  for (int i = 0; i < root->children_count; i++) {
+    free_tree(root->children[i]);
+  }
+
+  free(root->text);
+  free(root);
+}

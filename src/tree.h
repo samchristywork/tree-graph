@@ -11,5 +11,7 @@ typedef struct Tree {
 char **readNodes();
 char **readExtra(int *length);
 Tree *processNodes(char **lines);
+void free_lines(char **lines);
+void free_tree(Tree *root);
 
 #endif
