@@ -67,6 +67,13 @@ int main(int argc, char *argv[]) {
     .outfile = get_or_string('o', NULL)
   };
 
+  if (ctx.outfile == NULL) {
+    printf("Error: filename is required\n");
+    printf("\n");
+    usage();
+    return 1;
+  }
+
   char **lines = readNodes();
   Tree *root = processNodes(lines);
 
