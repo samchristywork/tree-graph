@@ -16,7 +16,8 @@ typedef struct Context {
   Vec2 gap; // Space between nodes
   int max_width;
   int max_height;
-  char *filename;
+  char *infile;
+  char *outfile;
 } Context;
 
 cairo_t *init_cairo(Context *ctx, int width, int height);
