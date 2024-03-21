@@ -1,0 +1,67 @@
+production-science-pack x 1
+  electric-furnace x 1
+    advanced-circuit x 5
+      copper-cable x 20
+        copper-plate x 20
+          copper-ore x 20
+      electronic-circuit x 10
+        copper-cable x 30
+          copper-plate x 30
+            copper-ore x 30
+        iron-plate x 10
+          iron-ore x 10
+      plastic-bar x 10
+        coal x 10
+        petroleum-gas x 200
+    steel-plate x 10
+      iron-plate x 50
+        iron-ore x 50
+    stone-brick x 10
+      stone x 20
+  productivity-module x 1
+    advanced-circuit x 5
+      copper-cable x 20
+        copper-plate x 20
+          copper-ore x 20
+      electronic-circuit x 10
+        copper-cable x 30
+          copper-plate x 30
+            copper-ore x 30
+        iron-plate x 10
+          iron-ore x 10
+      plastic-bar x 10
+        coal x 10
+        petroleum-gas x 200
+    electronic-circuit x 5
+      copper-cable x 15
+        copper-plate x 15
+          copper-ore x 15
+      iron-plate x 5
+        iron-ore x 5
+  rail x 30
+    iron-stick x 30
+      iron-plate x 30
+        iron-ore x 30
+    steel-plate x 30
+      iron-plate x 150
+        iron-ore x 150
+    stone x 30
+--
+advanced-circuit x 10
+coal x 20
+copper-cable x 115
+copper-ore x 115
+copper-plate x 115
+electric-furnace x 1
+electronic-circuit x 25
+iron-ore x 255
+iron-plate x 255
+iron-stick x 30
+petroleum-gas x 400
+plastic-bar x 20
+production-science-pack x 1
+productivity-module x 1
+rail x 30
+steel-plate x 40
+stone x 50
+stone-brick x 10

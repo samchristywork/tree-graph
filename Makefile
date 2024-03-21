@@ -14,6 +14,11 @@ build/%.o: src/%.c
 build/tree-render: build/main.o build/draw.o build/tree.o
 	${CC} build/*.o ${LIBS} -o $@
 
+.PHONY: sample
+sample: all
+	./build/tree-render -o sample.png < assets/sample.txt
+	@echo "Sample output written to sample.png"
+
 .PHONY: clean
 clean:
 	rm -rf build
