@@ -18,6 +18,10 @@ typedef struct Context {
   int max_height;
   char *infile;
   char *outfile;
+  bool styled; // Interpret input as styled text
+  int slant;
+  int weight;
+  char *font;
 } Context;
 
 cairo_t *init_cairo(Context *ctx, int width, int height);

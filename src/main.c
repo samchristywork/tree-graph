@@ -50,11 +50,13 @@ char *get_or_string(char c, char *def) {
 
 int main(int argc, char *argv[]) {
   add_arg('f', "font-size", "Set the size of the font (default 12).");
-  add_arg('m', "margin", "Set the margin around the tree (default 10,10).");
-  add_arg('p', "pad", "Set the padding around the text (default 5,5).");
   add_arg('g', "gap", "Set the gap between nodes (default 40,5).");
   add_arg('i', "infile", "Set the filename of the output image (default stdin).");
+  add_arg('m', "margin", "Set the margin around the tree (default 10,10).");
+  add_arg('n', "root-name", "Set the name of the root node (default \"root\").");
   add_arg('o', "outfile", "Set the filename of the output image.");
+  add_arg('p', "pad", "Set the padding around the text (default 5,5).");
+  add_arg('s', "styled", "Interpret the input as styled.");
 
   parse_opts(argc, argv);
 
@@ -64,7 +66,11 @@ int main(int argc, char *argv[]) {
     .pad = get_or_vec2('p', (Vec2) {5, 5}),
     .gap = get_or_vec2('g', (Vec2) {40, 5}),
     .infile = get_or_string('i', NULL),
-    .outfile = get_or_string('o', NULL)
+    .outfile = get_or_string('o', NULL),
+    .styled = get_is_set('s'), // TODO: Implement styled
+    .slant = CAIRO_FONT_SLANT_NORMAL,
+    .weight = CAIRO_FONT_WEIGHT_NORMAL,
+    .font = "Sans"
   };
 
   if (ctx.outfile == NULL) {
