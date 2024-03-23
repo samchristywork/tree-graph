@@ -76,23 +76,42 @@ void draw_text(Context *ctx, cairo_t *cr, Vec2 pos, const char *text) {
   cairo_show_text(cr, text);
 }
 
-double draw_node(Context *ctx, cairo_t *cr, Vec2 pos, char *text) {
-  double width = get_text_width(ctx, text);
+Vec2 draw_node(Context *ctx, cairo_t *cr, Vec2 pos, char *text) {
+  Vec2 rectSize = {0, 0};
+  int n = 0;
+  char **lines = split_text(text, '|', &n);
+
+  cairo_set_source_rgb(cr, 1, 1, 1);
+
+  for (int i = 0; i < n; i++) {
+    char *line = lines[i];
+
+    cairo_text_extents_t extents;
+    cairo_text_extents(cr, line, &extents);
+
+    rectSize.x = fmax(rectSize.x, extents.width + ctx->pad.x * 2);
+    rectSize.y += ctx->font_size + ctx->pad.y;
 
   }
-  draw_text_rect(ctx, cr, pos, width);
+  rectSize.y += ctx->pad.y;
 
-  Vec2 textPos = {pos.x, pos.y + ctx->font_size};
-  draw_text(ctx, cr, textPos, text);
+  draw_text_rect(ctx, cr, pos, rectSize);
 
-  return width;
+  for (int i = 0; i < n; i++) {
+    char *line = lines[i];
+    Vec2 textPos = {pos.x,
+                    pos.y + ctx->font_size + (ctx->font_size + ctx->pad.y) * i};
+
+    draw_text(ctx, cr, textPos, line);
+  }
+
+  return rectSize;
 }
 
-  }
-
+void draw_circle(cairo_t *cr, Vec2 pos, double radius) {
   cairo_set_source_rgb(cr, 0, 0, 0);
   cairo_arc(cr, pos.x, pos.y, radius, 0, 2 * M_PI);
-  cairo_stroke(cr);
+  cairo_fill(cr);
 }
 
 void draw_bezier(cairo_t *cr, Vec2 p1, Vec2 p2) {
