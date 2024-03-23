@@ -2,6 +2,7 @@
 #define DRAW_H
 
 #include <cairo/cairo.h>
+#include <stdbool.h>
 #include "tree.h"
 
 typedef struct Vec2 {

@@ -85,6 +85,10 @@ Vec2 draw_node(Context *ctx, cairo_t *cr, Vec2 pos, char *text) {
 
   for (int i = 0; i < n; i++) {
     char *line = lines[i];
+    if (line[0] == '#') {
+      cairo_select_font_face(cr, ctx->font, ctx->slant, CAIRO_FONT_WEIGHT_BOLD);
+      line++;
+    }
 
     cairo_text_extents_t extents;
     cairo_text_extents(cr, line, &extents);
@@ -92,6 +96,7 @@ Vec2 draw_node(Context *ctx, cairo_t *cr, Vec2 pos, char *text) {
     rectSize.x = fmax(rectSize.x, extents.width + ctx->pad.x * 2);
     rectSize.y += ctx->font_size + ctx->pad.y;
 
+    cairo_select_font_face(cr, ctx->font, ctx->slant, ctx->weight);
   }
   rectSize.y += ctx->pad.y;
 
@@ -99,10 +104,17 @@ Vec2 draw_node(Context *ctx, cairo_t *cr, Vec2 pos, char *text) {
 
   for (int i = 0; i < n; i++) {
     char *line = lines[i];
+    if (line[0] == '#') {
+      cairo_select_font_face(cr, ctx->font, ctx->slant, CAIRO_FONT_WEIGHT_BOLD);
+      line++;
+    }
+
     Vec2 textPos = {pos.x,
                     pos.y + ctx->font_size + (ctx->font_size + ctx->pad.y) * i};
 
     draw_text(ctx, cr, textPos, line);
+
+    cairo_select_font_face(cr, ctx->font, ctx->slant, ctx->weight);
   }
 
   return rectSize;
