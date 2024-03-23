@@ -8,20 +8,9 @@ cairo_t *init_cairo(Context *ctx, int width, int height) {
   cairo_surface_t *surface = cairo_image_surface_create(format, width, height);
   cairo_t *cr = cairo_create(surface);
 
-  int slant = CAIRO_FONT_SLANT_NORMAL;
-  int weight = CAIRO_FONT_WEIGHT_NORMAL;
-  cairo_select_font_face(cr, "Sans", slant, weight);
-
+  cairo_select_font_face(cr, ctx->font, ctx->slant, ctx->weight);
   cairo_set_font_size(cr, ctx->font_size);
   return cr;
-}
-
-double get_text_width(Context *ctx, const char *text) {
-  cairo_t *cr = init_cairo(ctx, 0, 0);
-
-  cairo_text_extents_t extents;
-  cairo_text_extents(cr, text, &extents);
-  return extents.width;
 }
 
 void draw_background(Context *ctx, cairo_t *cr) {
@@ -30,28 +19,21 @@ void draw_background(Context *ctx, cairo_t *cr) {
   cairo_fill(cr);
 }
 
-void draw_text_rect(Context *ctx, cairo_t *cr, Vec2 pos, double width) {
-  if (pos.x + width + ctx->pad.x * 2 > ctx->max_width) {
-    ctx->max_width = (int)(pos.x + width + ctx->pad.x * 2);
-  }
+void draw_text_rect(Context *ctx, cairo_t *cr, Vec2 pos, Vec2 size) {
+  cairo_set_line_width(cr, 2);
+  ctx->max_width = fmax(ctx->max_width, pos.x + size.x + ctx->pad.x * 2);
 
   ctx->max_height = fmax(ctx->max_height, pos.y + size.y + ctx->pad.y * 2);
 
   {
-    double w = width + ctx->pad.x * 2;
-    double h = ctx->font_size + ctx->pad.y * 2;
-
     cairo_set_source_rgb(cr, 1, 1, 1);
-    cairo_rectangle(cr, pos.x, pos.y, w, h);
+    cairo_rectangle(cr, pos.x, pos.y, size.x, size.y);
     cairo_fill(cr);
   }
 
   {
-    double w = width + ctx->pad.x * 2;
-    double h = ctx->font_size + ctx->pad.y * 2;
-
     cairo_set_source_rgb(cr, 0, 0, 0);
-    cairo_rectangle(cr, pos.x, pos.y, w, h);
+    cairo_rectangle(cr, pos.x, pos.y, size.x, size.y);
     cairo_stroke(cr);
   }
 }
