@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "draw.h"
 
@@ -38,11 +39,38 @@ void draw_text_rect(Context *ctx, cairo_t *cr, Vec2 pos, Vec2 size) {
   }
 }
 
-void draw_text(Context *ctx, cairo_t *cr, Vec2 pos, const char *text) {
-  if (cr == NULL) {
-    return;
+char **split_text(const char *text, char delim, int *n) {
+  int count = 1;
+  for (int i = 0; text[i] != '\0'; i++) {
+    if (text[i] == delim) {
+      count++;
+    }
   }
 
+  char **lines = malloc(sizeof(char *) * count);
+  int j = 0;
+  int start = 0;
+  for (int i = 0; text[i] != '\0'; i++) {
+    if (text[i] == delim) {
+      int len = i - start;
+      lines[j] = malloc(len + 1);
+      strncpy(lines[j], text + start, len);
+      lines[j][len] = '\0';
+      start = i + 1;
+      j++;
+    }
+  }
+
+  int len = strlen(text) - start;
+  lines[j] = malloc(len + 1);
+  strncpy(lines[j], text + start, len);
+  lines[j][len] = '\0';
+
+  *n = count;
+  return lines;
+}
+
+void draw_text(Context *ctx, cairo_t *cr, Vec2 pos, const char *text) {
   cairo_set_source_rgb(cr, 0, 0, 0);
   cairo_move_to(cr, pos.x + ctx->pad.x, pos.y + ctx->pad.y);
   cairo_show_text(cr, text);
