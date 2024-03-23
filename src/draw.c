@@ -35,13 +35,7 @@ void draw_text_rect(Context *ctx, cairo_t *cr, Vec2 pos, double width) {
     ctx->max_width = (int)(pos.x + width + ctx->pad.x * 2);
   }
 
-  if (pos.y + ctx->font_size + ctx->pad.y * 2 > ctx->max_height) {
-    ctx->max_height = (int)(pos.y + ctx->font_size + ctx->pad.y * 2);
-  }
-
-  if (cr == NULL) {
-    return;
-  }
+  ctx->max_height = fmax(ctx->max_height, pos.y + size.y + ctx->pad.y * 2);
 
   {
     double w = width + ctx->pad.x * 2;
@@ -75,8 +69,6 @@ void draw_text(Context *ctx, cairo_t *cr, Vec2 pos, const char *text) {
 double draw_node(Context *ctx, cairo_t *cr, Vec2 pos, char *text) {
   double width = get_text_width(ctx, text);
 
-  if (cr != NULL) {
-    cairo_set_source_rgb(cr, 1, 1, 1);
   }
   draw_text_rect(ctx, cr, pos, width);
 
@@ -86,9 +78,6 @@ double draw_node(Context *ctx, cairo_t *cr, Vec2 pos, char *text) {
   return width;
 }
 
-void draw_circle(cairo_t *cr, Vec2 pos, double radius) {
-  if (cr == NULL) {
-    return;
   }
 
   cairo_set_source_rgb(cr, 0, 0, 0);
@@ -97,10 +86,6 @@ void draw_circle(cairo_t *cr, Vec2 pos, double radius) {
 }
 
 void draw_bezier(cairo_t *cr, Vec2 p1, Vec2 p2) {
-  if (cr == NULL) {
-    return;
-  }
-
   double xmid = (p1.x + p2.x) / 2;
   cairo_set_source_rgba(cr, 0.6, 0.5, 0.7, 0.5);
   cairo_move_to(cr, p1.x, p1.y);

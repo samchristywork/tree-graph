@@ -79,7 +79,8 @@ int main(int argc, char *argv[]) {
 
   // First pass to calculate the width and height of the tree
   Vec2 pos = {0, 0};
-  draw_tree(&ctx, NULL, root, pos);
+  cairo_t *virtual = init_cairo(&ctx, 0, 0);
+  draw_tree(&ctx, virtual, root, pos);
   ctx.max_width += ctx.margin.x*2;
   ctx.max_height += ctx.margin.y*2;
 

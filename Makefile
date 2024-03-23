@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-Isrc/
-LIBS=-lcairo
+LIBS=-lcairo -lm
 
 all: build/tree-render
 
