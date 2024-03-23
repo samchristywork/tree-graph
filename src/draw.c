@@ -115,6 +115,7 @@ void draw_circle(cairo_t *cr, Vec2 pos, double radius) {
 }
 
 void draw_bezier(cairo_t *cr, Vec2 p1, Vec2 p2) {
+  cairo_set_line_width(cr, 2);
   double xmid = (p1.x + p2.x) / 2;
   cairo_set_source_rgba(cr, 0.6, 0.5, 0.7, 0.5);
   cairo_move_to(cr, p1.x, p1.y);
@@ -127,11 +128,11 @@ void draw_bezier(cairo_t *cr, Vec2 p1, Vec2 p2) {
 
 double draw_tree(Context *ctx, cairo_t *cr, Tree *tree, Vec2 pos) {
   Vec2 initial = {pos.x, pos.y};
-  double width = draw_node(ctx, cr, initial, tree->text);
-  pos.x += width + ctx->pad.x * 2 + ctx->gap.x;
+  Vec2 extents = draw_node(ctx, cr, initial, tree->text);
+  pos.x += extents.x + ctx->gap.x;
 
   if (tree->children_count == 0) {
-    return ctx->font_size + ctx->pad.y * 2 + ctx->gap.y;
+    return extents.y + ctx->gap.y;
   }
 
   double height = 0;
@@ -146,5 +147,5 @@ double draw_tree(Context *ctx, cairo_t *cr, Tree *tree, Vec2 pos) {
   }
 
   draw_node(ctx, cr, initial, tree->text);
-  return height;
+  return fmax(height, extents.y + ctx->gap.y);
 }
