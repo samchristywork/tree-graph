@@ -24,6 +24,7 @@ typedef struct Context {
   int slant;
   int weight;
   char *font;
+  char *root_name; // The name of the root node
 } Context;
 
 cairo_t *init_cairo(Context *ctx, int width, int height);

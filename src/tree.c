@@ -86,9 +86,9 @@ int getDepthFromIndentation(const char *line) {
   return depth / 2 + 1;
 }
 
-Tree *processNodes(char **lines) {
+Tree *processNodes(char **lines, char *root_name) {
   Tree *root = malloc(sizeof(Tree));
-  root->text = strdup("root");
+  root->text = strdup(root_name);
 
   Tree *currentNode = root;
   int currentDepth = 0;

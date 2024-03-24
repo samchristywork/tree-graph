@@ -10,7 +10,7 @@ typedef struct Tree {
 
 char **readNodes();
 char **readExtra(int *length);
-Tree *processNodes(char **lines);
+Tree *processNodes(char **lines, char *root_name);
 void free_lines(char **lines);
 void free_tree(Tree *root);
 

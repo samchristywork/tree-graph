@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
   }
 
   char **lines = readNodes();
-  Tree *root = processNodes(lines);
+  Tree *root = processNodes(lines, ctx.root_name);
 
   // First pass to calculate the width and height of the tree
   Vec2 pos = {0, 0};
