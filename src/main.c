@@ -81,7 +81,17 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  char **lines = readNodes();
+  FILE *f = stdin;
+  char **lines;
+  if (ctx.infile != NULL) {
+    f = fopen(ctx.infile, "r");
+    if (f == NULL) {
+      printf("Error: could not open file\n");
+      return 1;
+    }
+  }
+  lines = readNodes(f);
+
   Tree *root = processNodes(lines, ctx.root_name);
 
   // First pass to calculate the width and height of the tree
@@ -93,7 +103,7 @@ int main(int argc, char *argv[]) {
 
   // Read the extra text and recalculate the height
   int length = 0;
-  char **lines2 = readExtra(&length);
+  char **lines2 = readExtra(f, &length);
 
   int extraHeight = (length + 2) * ctx.font_size + ctx.pad.y * 4;
   ctx.max_height = max(extraHeight, ctx.max_height);

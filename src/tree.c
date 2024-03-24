@@ -25,13 +25,13 @@ void print_tree(Tree *tree, int depth) {
   }
 }
 
-char **readNodes() {
+char **readNodes(FILE *stream) {
   char **lines = NULL;
   char *line = NULL;
   size_t len = 0;
   ssize_t read;
   unsigned int count = 0;
-  while ((read = getline(&line, &len, stdin)) != -1) {
+  while ((read = getline(&line, &len, stream)) != -1) {
     if (strstr(line, "--\n") == line) {
       break;
     }
@@ -55,13 +55,13 @@ char **readNodes() {
   return lines;
 }
 
-char **readExtra(int *length) {
+char **readExtra(FILE *f, int *length) {
   char **lines = NULL;
   char *line = NULL;
   size_t len = 0;
   ssize_t read;
   unsigned int count = 0;
-  while ((read = getline(&line, &len, stdin)) != -1) {
+  while ((read = getline(&line, &len, f)) != -1) {
     if (line[read - 1] == '\n') {
       line[read - 1] = '\0';
     }
