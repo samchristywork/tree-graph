@@ -38,6 +38,11 @@ char **readNodes() {
     if (line[read - 1] == '\n') {
       line[read - 1] = '\0';
     }
+    for (int i = 0; i < read; i++) {
+      if (line[i] == '|') {
+        line[i] = '\n';
+      }
+    }
     lines = realloc(lines, sizeof(char *) * (count + 1));
     lines[count] = strdup(line);
     count++;

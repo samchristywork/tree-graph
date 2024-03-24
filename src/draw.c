@@ -79,7 +79,7 @@ void draw_text(Context *ctx, cairo_t *cr, Vec2 pos, const char *text) {
 Vec2 draw_node(Context *ctx, cairo_t *cr, Vec2 pos, char *text) {
   Vec2 rectSize = {0, 0};
   int n = 0;
-  char **lines = split_text(text, '|', &n);
+  char **lines = split_text(text, '\n', &n);
 
   cairo_set_source_rgb(cr, 1, 1, 1);
 
