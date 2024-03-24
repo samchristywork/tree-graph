@@ -14,8 +14,8 @@ typedef struct Vec2 {
 typedef struct Context {
   double font_size;
   Vec2 margin; // Space around the tree
-  Vec2 pad; // Space around the text
-  Vec2 gap; // Space between nodes
+  Vec2 pad;    // Space around the text
+  Vec2 gap;    // Space between nodes
   int max_width;
   int max_height;
   char *infile;

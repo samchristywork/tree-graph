@@ -14,9 +14,9 @@ int max(int a, int b) {
 }
 
 double get_or_double(char c, double def) {
-  if(get_is_set(c)) {
+  if (get_is_set(c)) {
     char *value = get_value(c);
-    if(strlen(value) > 0) {
+    if (strlen(value) > 0) {
       return atof(value);
     }
   }
@@ -25,12 +25,12 @@ double get_or_double(char c, double def) {
 }
 
 Vec2 get_or_vec2(char c, Vec2 def) {
-  if(get_is_set(c)) {
+  if (get_is_set(c)) {
     char *value = get_value(c);
-    if(strlen(value) > 0) {
+    if (strlen(value) > 0) {
       char *x = strtok(value, ",");
       char *y = strtok(NULL, ",");
-      return (Vec2) {atof(x), atof(y)};
+      return (Vec2){atof(x), atof(y)};
     }
   }
 
@@ -38,9 +38,9 @@ Vec2 get_or_vec2(char c, Vec2 def) {
 }
 
 char *get_or_string(char c, char *def) {
-  if(get_is_set(c)) {
+  if (get_is_set(c)) {
     char *value = get_value(c);
-    if(strlen(value) > 0) {
+    if (strlen(value) > 0) {
       return value;
     }
   }
@@ -88,8 +88,8 @@ int main(int argc, char *argv[]) {
   Vec2 pos = {0, 0};
   cairo_t *virtual = init_cairo(&ctx, 0, 0);
   draw_tree(&ctx, virtual, root, pos);
-  ctx.max_width += ctx.margin.x*2;
-  ctx.max_height += ctx.margin.y*2;
+  ctx.max_width += ctx.margin.x * 2;
+  ctx.max_height += ctx.margin.y * 2;
 
   // Read the extra text and recalculate the height
   int length = 0;
