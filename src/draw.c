@@ -85,7 +85,7 @@ Vec2 draw_node(Context *ctx, cairo_t *cr, Vec2 pos, char *text) {
 
   for (int i = 0; i < n; i++) {
     char *line = lines[i];
-    if (line[0] == '#') {
+    if (ctx->styled && line[0] == '#') {
       cairo_select_font_face(cr, ctx->font, ctx->slant, CAIRO_FONT_WEIGHT_BOLD);
       line++;
     }
@@ -104,7 +104,7 @@ Vec2 draw_node(Context *ctx, cairo_t *cr, Vec2 pos, char *text) {
 
   for (int i = 0; i < n; i++) {
     char *line = lines[i];
-    if (line[0] == '#') {
+    if (ctx->styled && line[0] == '#') {
       cairo_select_font_face(cr, ctx->font, ctx->slant, CAIRO_FONT_WEIGHT_BOLD);
       line++;
     }

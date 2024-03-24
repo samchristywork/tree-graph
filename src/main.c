@@ -61,16 +61,17 @@ int main(int argc, char *argv[]) {
   parse_opts(argc, argv);
 
   Context ctx = {
-    .font_size = get_or_double('f', 12),
-    .margin = get_or_vec2('m', (Vec2) {10, 10}),
-    .pad = get_or_vec2('p', (Vec2) {5, 5}),
-    .gap = get_or_vec2('g', (Vec2) {40, 5}),
-    .infile = get_or_string('i', NULL),
-    .outfile = get_or_string('o', NULL),
-    .styled = get_is_set('s'), // TODO: Implement styled
-    .slant = CAIRO_FONT_SLANT_NORMAL,
-    .weight = CAIRO_FONT_WEIGHT_NORMAL,
-    .font = "Sans"
+      .font_size = get_or_double('f', 12),
+      .margin = get_or_vec2('m', (Vec2){10, 10}),
+      .pad = get_or_vec2('p', (Vec2){5, 5}),
+      .gap = get_or_vec2('g', (Vec2){40, 5}),
+      .infile = get_or_string('i', NULL),
+      .outfile = get_or_string('o', NULL),
+      .styled = get_is_set('s'),
+      .slant = CAIRO_FONT_SLANT_NORMAL,
+      .weight = CAIRO_FONT_WEIGHT_NORMAL,
+      .font = "Sans",
+      .root_name = get_or_string('n', "root"),
   };
 
   if (ctx.outfile == NULL) {
