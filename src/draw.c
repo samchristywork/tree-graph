@@ -117,6 +117,10 @@ Vec2 draw_node(Context *ctx, cairo_t *cr, Vec2 pos, char *text) {
     cairo_select_font_face(cr, ctx->font, ctx->slant, ctx->weight);
   }
 
+  for (int i = 0; i < n; i++) {
+    free(lines[i]);
+  }
+
   return rectSize;
 }
 
